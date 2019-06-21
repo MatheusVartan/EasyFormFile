@@ -16,16 +16,26 @@ namespace EasyFormFile
         /// Static String containing the type of IFormFile content. The content is required to convert a byte[] to IFormFile.
         /// </summary>
         public static string ContentType { get; set; }
+
+        /// <summary>
+        /// Converts a collection of IFormFile in a collection of byte[]
+        /// </summary>
+        /// <param name="iFormFiles">The collection of IFormFile to be converted</param>
+        /// <returns>Returns a collection of byte[]</returns>
         public static ICollection<byte[]> ToByteArrays(this ICollection<IFormFile> iFormFiles)
         {
             ICollection<byte[]> byteArrayCollection = new List<byte[]>();
             foreach (var iFormFile in iFormFiles)
-            {
-                byteArrayCollection.Add(iFormFile.ToByArray());
-            }
+                byteArrayCollection.Add(iFormFile.ToByteArray());
             return byteArrayCollection;
         }
-        public static byte[] ToByArray(this IFormFile iFormFile)
+
+        /// <summary>
+        /// Converts a IFormFile to byte[]
+        /// </summary>
+        /// <param name="iFormFile">The IFormFile to be converted</param>
+        /// <returns>Returns a byte[]</returns>
+        public static byte[] ToByteArray(this IFormFile iFormFile)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -34,15 +44,25 @@ namespace EasyFormFile
                 return memoryStream.ToArray();
             }
         }
+
+        /// <summary>
+        /// Asynchronously converts a collection of IFormFile in a collection of byte[]
+        /// </summary>
+        /// <param name="iFormFiles">The collection of IFormFile to be converted</param>
+        /// <returns>Returns a collection of byte[]</returns>
         public static async Task<ICollection<byte[]>> ToByteArraysAsync(this ICollection<IFormFile> iFormFiles)
         {
             ICollection<byte[]> byteArrayCollection = new List<byte[]>();
             foreach (var iFormFile in iFormFiles)
-            {
                 byteArrayCollection.Add(await iFormFile.ToByteArrayAsync());
-            }
             return byteArrayCollection;
         }
+
+        /// <summary>
+        /// Asynchronously converts a IFormFile to byte[]
+        /// </summary>
+        /// <param name="iFormFile">The IFormFile to be converted</param>
+        /// <returns>Returns a byte[]</returns>
         public static async Task<byte[]> ToByteArrayAsync(this IFormFile iFormFile)
         {
             using (MemoryStream memoryStream = new MemoryStream())
@@ -51,6 +71,17 @@ namespace EasyFormFile
                 ContentType = iFormFile.ContentType;
                 return memoryStream.ToArray();
             }
+        }
+
+        /// <summary>
+        /// Creates physical files from a collection of IFormFile
+        /// </summary>
+        /// <param name="iFormFiles">The collection of IFormFile used to create the physical files</param>
+        /// <param name="path">The path where the files will be created</param>
+        public static void ToFiles(this ICollection<IFormFile> iFormFiles, string path)
+        {
+            foreach (var iFormFile in iFormFiles)
+                iFormFile.ToFile(path);
         }
 
         /// <summary>
@@ -65,6 +96,18 @@ namespace EasyFormFile
                 iFormFile.CopyTo(fileStream);
             }
         }
+
+        /// <summary>
+        /// Asynchronously creates physical files from a collection of IFormFile
+        /// </summary>
+        /// <param name="iFormFiles">The collection of IFormFile used to create the physical files</param>
+        /// <param name="path">The path where the files will be created</param>
+        public async static Task ToFilesAsync(this ICollection<IFormFile> iFormFiles, string path)
+        {
+            foreach (var iFormFile in iFormFiles)
+                await iFormFile.ToFileAsync(path);
+        }
+
         /// <summary>
         /// Asynchronously creates physical file from IFormFile
         /// </summary>
@@ -79,7 +122,7 @@ namespace EasyFormFile
         }
 
         /// <summary>
-        /// Convert a byte[] to FileStreamResult
+        /// Converts a byte[] to FileStreamResult
         /// </summary>
         /// <param name="byteArray">The byte[] to be converted</param>
         /// <param name="contentType">The content type of the byte[] needed to convertion</param>
@@ -93,19 +136,32 @@ namespace EasyFormFile
         }
 
         /// <summary>
-        /// Convert FileStreamResult to IFormFile
+        /// Converts a FileStreamResult to IFormFile
         /// </summary>
         /// <param name="fileStreamResult">The FileStreamResult to be converted</param>
         /// <param name="name">Set the name from the Content-Disposition header.</param>
         /// <param name="fileName">Set the file name from the Content-Disposition header.</param>
         /// <returns>Returns a IFormFile</returns>
-        public static IFormFile ToIFormFile(this FileStreamResult fileStreamResult, string name = "", string fileName = "")
+        public static IFormFile ToIFormFile(this FileStreamResult fileStreamResult, string name = "name", string fileName = "fileName")
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 fileStreamResult.FileStream.CopyTo(memoryStream);
                 return new FormFile(memoryStream, 0, memoryStream.Length, name, fileName);
             }
+        }
+
+        /// <summary>
+        /// Converts a byte[] to IFormFile
+        /// </summary>
+        /// <param name="byteArray">The byte[] to be converted</param>
+        /// <param name="contentType">The content type of the byte[] needed to convertion</param>
+        /// <param name="name">Set the name from the Content-Disposition header.</param>
+        /// <param name="fileName">Set the file name from the Content-Disposition header.</param>
+        /// <returns></returns>
+        public static IFormFile ToIFormFile(this byte[] byteArray, string contentType, string name = "name", string fileName = "fileName")
+        {
+            return byteArray.ToFileStreamResult(contentType).ToIFormFile(name, fileName);
         }
     }
 }
