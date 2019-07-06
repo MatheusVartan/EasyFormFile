@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace EasyFormFile
@@ -162,6 +163,98 @@ namespace EasyFormFile
         public static IFormFile ToIFormFile(this byte[] byteArray, string contentType, string name = "name", string fileName = "fileName")
         {
             return byteArray.ToFileStreamResult(contentType).ToIFormFile(name, fileName);
+        }
+
+        /// <summary>
+        /// Returns a collection of byte[] strings to a collection of base64 strings.
+        /// </summary>
+        /// <param name="byteArrays">The collection of byte[] to be converted</param>
+        /// <returns>Returns a collection of base64 strings</returns>
+        public static ICollection<string> ToBase64Strings(this ICollection<byte[]> byteArrays)
+        {
+            ICollection<string> baseStringCollection = new List<string>();
+            foreach (byte[] byteArray in byteArrays)
+                baseStringCollection.Add(byteArray.ToBase64String());
+            return baseStringCollection;
+        }
+
+        /// <summary>
+        /// Asynchronously converts a collection of byte[] strings to a collection of base64 strings.
+        /// </summary>
+        /// <param name="byteArrays">The collection of byte[] to be converted</param>
+        /// <returns>Returns a collection of base64 strings</returns>
+        public static async Task<ICollection<string>> ToBase64StringsAsync(this ICollection<byte[]> byteArrays)
+        {
+            ICollection<string> baseStringCollection = new List<string>();
+            foreach (byte[] byteArray in byteArrays)
+                baseStringCollection.Add(await byteArray.ToBase64StringAsync());
+            return baseStringCollection;
+        }
+
+        /// <summary>
+        /// Converts a byte[] to a base64 string.
+        /// </summary>
+        /// <param name="byteArray">The byte[] to be converted.</param>
+        /// <returns>Returns a byte[].</returns>
+        public static string ToBase64String(this byte[] byteArray)
+        {
+            return Convert.ToBase64String(byteArray);
+        }
+
+        /// <summary>
+        /// Asynchronously converts a byte[] to a base64 string.
+        /// </summary>
+        /// <param name="byteArray">The byte[] to be converted.</param>
+        /// <returns>Returns a byte[].</returns>
+        public static async Task<string> ToBase64StringAsync(this byte[] byteArray)
+        {
+            return await Task.FromResult(Convert.ToBase64String(byteArray));
+        }
+
+        /// <summary>
+        /// Converts a collection of base64 string to a collection of byte[].
+        /// </summary>
+        /// <param name="baseStrings">The collection of base64 strings to be converted.</param>
+        /// <returns>Return a collection of byte[]</returns>
+        public static ICollection<byte[]> ToByteArrays(this ICollection<string> baseStrings)
+        {
+            ICollection<byte[]> byteArrayCollection = new List<byte[]>();
+            foreach (string baseString in baseStrings)
+                byteArrayCollection.Add(baseString.ToByteArray());
+            return byteArrayCollection;
+        }
+
+        /// <summary>
+        /// Asynchronously converts a collection of base64 string to a collection of byte[].
+        /// </summary>
+        /// <param name="baseStrings">The collection of base64 strings to be converted.</param>
+        /// <returns>Return a collection of byte[]</returns>
+        public static async Task<ICollection<byte[]>> ToByteArraysAsync(this ICollection<string> baseStrings)
+        {
+            ICollection<byte[]> byteArrayCollection = new List<byte[]>();
+            foreach (string baseString in baseStrings)
+                byteArrayCollection.Add(await baseString.ToByteArrayAsync());
+            return byteArrayCollection;
+        }
+
+        /// <summary>
+        /// Converts a base64 string to a byte[].
+        /// </summary>
+        /// <param name="baseString">The base64 string to be converted.</param>
+        /// <returns>Returns a byte[].</returns>
+        public static byte[] ToByteArray(this string baseString)
+        {
+            return Convert.FromBase64String(baseString);
+        }
+
+        /// <summary>
+        /// Asynchronously converts a base64 string to a byte[].
+        /// </summary>
+        /// <param name="baseString">The base64 string to be converted.</param>
+        /// <returns>Returns a byte[].</returns>
+        public static async Task<byte[]> ToByteArrayAsync(this string baseString)
+        {
+            return await Task.FromResult(Convert.FromBase64String(baseString));
         }
     }
 }

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyFormFile", "EasyFormFile\EasyFormFile.csproj", "{23DA6B5E-00F9-4A40-AA0D-2E673E7FB22A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyFormFile", "EasyFormFile\EasyFormFile.csproj", "{23DA6B5E-00F9-4A40-AA0D-2E673E7FB22A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteEasyFormFile", "TesteEasyFormFile\TesteEasyFormFile.csproj", "{F92DE89A-70E4-40A5-AE6D-18EB656748BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{23DA6B5E-00F9-4A40-AA0D-2E673E7FB22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23DA6B5E-00F9-4A40-AA0D-2E673E7FB22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23DA6B5E-00F9-4A40-AA0D-2E673E7FB22A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92DE89A-70E4-40A5-AE6D-18EB656748BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92DE89A-70E4-40A5-AE6D-18EB656748BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92DE89A-70E4-40A5-AE6D-18EB656748BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92DE89A-70E4-40A5-AE6D-18EB656748BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
